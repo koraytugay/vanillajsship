@@ -1,9 +1,14 @@
 .cell {
   display: inline-block;
   border: solid black;
-  width: 50pt;
-  height: 50pt;
+  width: 40pt;
+  height: 40pt;
   margin: 1px 4px 1px 2px;
+  border-radius: 10px;
+}
+
+#container {
+  margin: 25px;
 }
 
 .noAttempt {
