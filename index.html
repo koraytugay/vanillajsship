@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VanillaJsShip</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="container">
+  <div id="Control Buttons" style="margin-bottom: 20px">
+    <button id="newGame">New Game</button>
+    <button id="undo">Undo</button>
+    <button id="redo">Redo</button>
+  </div>
+  <div id="board"></div>
+  <hr/>
+  <div id="legend">
+    <p>Legend</p>
+    <div>
+      <div id="sampleNoAttempt" class="cell noAttempt"></div> No attempt
+    </div>
+    <div>
+      <div id="sampleMissed" class="cell missed"></div> Missed
+    </div>
+    <div>
+      <div id="samplePartialHit" class="cell hit"></div> Partially Hit
+    </div>
+    <div>
+      <div id="sampleSank" class="cell sank"></div> Sank
+    </div>
+  </div>
+</div>
+<script type="module" src="board.js"></script>
+<script type="module" src="ship.js"></script>
+<script type="module" src="shipService.js"></script>
+<script type="module" src="boardService.js"></script>
+<script type="module" src="gameController.js"></script>
+<script>
+</script>
+</body>
+</html>
