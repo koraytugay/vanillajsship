@@ -7,14 +7,19 @@ console.log("Running boardServiceTests.js");
 // Test addShip
 let board = new Board(8);
 let ship = new Ship(["00"]);
-let shipAdded = boardService.addShip(board, ship);
-if (!shipAdded) {
+try {
+  boardService.addShip(board, ship);
+}
+catch (e) {
   alert("Ship was not added!");
 }
 
-shipAdded = boardService.addShip(board, ship);
-if (shipAdded) {
+try {
+  boardService.addShip(board, ship);
   alert("Ship was added!");
+}
+catch (ignored) {
+  // This is expected..
 }
 
 // Test missileCoordinate

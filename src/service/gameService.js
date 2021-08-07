@@ -14,7 +14,12 @@ const gameService = function() {
     // Try adding a few ships
     for (let i = 1; i < 24; i++) {
       let ship = shipService.newRandomShip(board.boardSize);
-      boardService.addShip(board, ship);
+      try {
+        boardService.addShip(board, ship);
+      }
+      catch (ignored) {
+        // this is ok..
+      }
     }
     return new Game(board);
   }

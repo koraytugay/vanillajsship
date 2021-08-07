@@ -7,12 +7,11 @@ const boardService = function() {
 
     for (const existingShipOnBoard of board.ships) {
       if (shipService.isBoundariesOfShipInCoordinates(existingShipOnBoard, shipCoordinates)) {
-        return false;
+        throw "Ships is in the boundaries of another ship."
       }
     }
 
     board.ships.push(ship);
-    return true;
   }
 
   function missileCoordinate(board, coordinate) {
