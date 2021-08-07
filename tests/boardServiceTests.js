@@ -44,7 +44,6 @@ if (board.missileAttempts.includes("00")) {
 
 // Test allShipsSank
 board = new Board(2);
-console.log(board);
 
 boardService.addShip(board, new Ship(["00"]));
 boardService.addShip(board, new Ship(["22"]));

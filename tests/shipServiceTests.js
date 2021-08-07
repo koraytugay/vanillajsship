@@ -123,8 +123,6 @@ if (populatedCoordinates.size !== 64) {
   alert(`Populated coordinates length was: ${populatedCoordinates.size}`);
 }
 
-console.log([...populatedCoordinates].sort());
-
 for (const populatedCoordinate of populatedCoordinates) {
   if (parseInt(populatedCoordinate[0]) > 7 || parseInt(populatedCoordinate[1]) > 7) {
     alert("Populated coordinate must not be greater than 7.")

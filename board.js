@@ -1,11 +1,5 @@
-class Board {
-  boardSize;
-  ships = [];
-  missileAttempts = [];
-
-  constructor(boardSize) {
-    this.boardSize = boardSize;
-  }
-}
-
-export default Board;
+export default function Board(boardSize) {
+  this.boardSize = boardSize;
+  this.ships = [];
+  this.missileAttempts = [];
+};
