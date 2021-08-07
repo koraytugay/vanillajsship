@@ -61,7 +61,7 @@ const shipService = function() {
     return Object.keys(ship.coordinateIsHitByMissileMap).includes(coordinate);
   }
 
-  function isBoundariesOfShipInCoordinates(ship, coordinates) {
+  function isShipBoundariesOccupiesCoordinates(ship, coordinates) {
     let occupiesCoordinate = false;
 
     Object.keys(ship.coordinateIsHitByMissileMap).forEach(shipCoordinate => {
@@ -83,7 +83,7 @@ const shipService = function() {
     missile,
     unMissile,
     hasPartOnCoordinate,
-    isBoundariesOfShipInCoordinates,
+    isShipBoundariesOccupiesCoordinates,
     newRandomShip
   }
 }();

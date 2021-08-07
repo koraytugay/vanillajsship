@@ -84,13 +84,13 @@ assertNotInBoundaries(ship, ["66"]);
 assertInBoundaries(ship, ["00", "55"]);
 
 function assertInBoundaries(ship, coordinates) {
-  if (!shipService.isBoundariesOfShipInCoordinates(ship, coordinates)) {
+  if (!shipService.isShipBoundariesOccupiesCoordinates(ship, coordinates)) {
     alert("Should have been in boundaries!");
   }
 }
 
 function assertNotInBoundaries(ship, coordinates) {
-  if (shipService.isBoundariesOfShipInCoordinates(ship, coordinates)) {
+  if (shipService.isShipBoundariesOccupiesCoordinates(ship, coordinates)) {
     alert("Should have not been in boundaries!");
   }
 }

@@ -5,8 +5,8 @@ const boardService = function() {
   function addShip(board, ship) {
     const shipCoordinates = Object.keys(ship.coordinateIsHitByMissileMap);
 
-    for (const existingShipOnBoard of board.ships) {
-      if (shipService.isBoundariesOfShipInCoordinates(existingShipOnBoard, shipCoordinates)) {
+    for (const shipOnBoard of board.ships) {
+      if (shipService.isShipBoundariesOccupiesCoordinates(shipOnBoard, shipCoordinates)) {
         throw "Ships is in the boundaries of another ship."
       }
     }
@@ -16,22 +16,14 @@ const boardService = function() {
 
   function missileCoordinate(board, coordinate) {
     board.missileAttempts.push(coordinate);
-
-    let isHit = false;
-    for (const ship of board.ships) {
-      isHit = isHit || shipService.missile(ship, coordinate);
-    }
-
-    return isHit;
+    return board.ships.some(ship => shipService.missile(ship, coordinate));
   }
 
-  function unMissileCoordinate(board, coordinate) {
-    board.missileAttempts = board.missileAttempts.filter(item => {
-      return item !== coordinate;
+  function unMissileCoordinate(board, missileCoordinate) {
+    board.missileAttempts = board.missileAttempts.filter(boardCoordinate => {
+      return boardCoordinate !== missileCoordinate;
     });
-    for (const ship of board.ships) {
-      shipService.unMissile(ship, coordinate);
-    }
+    board.ships.forEach(ship => shipService.unMissile(ship, missileCoordinate));
   }
 
   function allShipsSank(board) {
