@@ -1,6 +1,6 @@
-import Board from './board.js';
+import Board from '../modal/board.js';
 import boardService from './boardService.js';
-import Game from './game.js';
+import Game from '../modal/game.js';
 import shipService from './shipService.js';
 
 const gameService = function() {

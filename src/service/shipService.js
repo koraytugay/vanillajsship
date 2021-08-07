@@ -1,4 +1,4 @@
-import Ship from './ship.js';
+import Ship from '../modal/ship.js';
 
 const shipService = function() {
   // Generates a random number between 0 and max - exclusive.

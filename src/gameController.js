@@ -1,6 +1,6 @@
-import gameService from './gameService.js';
-import shipService from './shipService.js';
-import boardService from './boardService.js';
+import gameService from './service/gameService.js';
+import shipService from './service/shipService.js';
+import boardService from './service/boardService.js';
 
 let currentGame;
 
