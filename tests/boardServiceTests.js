@@ -1,6 +1,6 @@
-import Board from '../board.js';
-import Ship from '../ship.js';
-import boardService from '../boardService.js';
+import Board from '../src/board.js';
+import Ship from '../src/ship.js';
+import boardService from '../src/boardService.js';
 
 console.log("Running boardServiceTests.js");
 

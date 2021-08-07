@@ -1,5 +1,5 @@
-import Ship from '../ship.js';
-import shipService from '../shipService.js';
+import Ship from '../src/ship.js';
+import shipService from '../src/shipService.js';
 
 console.log("Running shipServiceTests.js");
 
