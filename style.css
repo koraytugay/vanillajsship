@@ -40,3 +40,19 @@ button {
   width: 150px;
   background: lightgray;
 }
+
+#info {
+  background: rgb(207, 226, 255);
+  color: rgb(8, 66, 152);
+  height: 20px;
+  padding: 16px;
+  border-radius: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+.block {
+  display: block
+}

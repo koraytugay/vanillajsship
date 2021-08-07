@@ -1,5 +1,6 @@
 import gameService from './gameService.js';
 import shipService from './shipService.js';
+import boardService from './boardService.js';
 
 let currentGame;
 
@@ -44,6 +45,8 @@ function missileCoordinate(evt) {
       }
     }
   });
+
+  checkGameIsFinished();
 }
 
 function undo() {
@@ -72,6 +75,8 @@ function undo() {
       })
     }
   });
+
+  checkGameIsFinished();
 }
 
 function redo() {
@@ -98,6 +103,20 @@ function redo() {
       }
     }
   });
+
+  checkGameIsFinished();
+}
+
+function checkGameIsFinished() {
+  const infoPanel = document.querySelector("#info");
+  const isAllShipsSank = boardService.allShipsSank(currentGame.board)
+  if (!isAllShipsSank) {
+    infoPanel.classList.add("hidden");
+    infoPanel.classList.remove("block");
+  } else {
+    infoPanel.classList.remove("hidden");
+    infoPanel.classList.add("block");
+  }
 }
 
 document.querySelector("#newGame").addEventListener("click", () => {
