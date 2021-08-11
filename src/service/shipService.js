@@ -39,32 +39,32 @@ const shipService = function() {
     return new Ship(coordinates);
   }
 
-  function isSank(ship) {
-    return Object.values(ship.coordinateIsHitByMissileMap).every(isHit => isHit);
+  function isSank({coordinateIsHitByMissileMap}) {
+    return Object.values(coordinateIsHitByMissileMap).every(isHit => isHit);
   }
 
-  function missile(ship, coordinate) {
-    if (Object.keys(ship.coordinateIsHitByMissileMap).includes(coordinate)) {
-      ship.coordinateIsHitByMissileMap[coordinate] = true;
+  function missile({coordinateIsHitByMissileMap}, coordinate) {
+    if (Object.keys(coordinateIsHitByMissileMap).includes(coordinate)) {
+      coordinateIsHitByMissileMap[coordinate] = true;
       return true;
     }
     return false;
   }
 
-  function unMissile(ship, coordinate) {
-    if (Object.keys(ship.coordinateIsHitByMissileMap).includes(coordinate)) {
-      ship.coordinateIsHitByMissileMap[coordinate] = false;
+  function unMissile({coordinateIsHitByMissileMap}, coordinate) {
+    if (Object.keys(coordinateIsHitByMissileMap).includes(coordinate)) {
+      coordinateIsHitByMissileMap[coordinate] = false;
     }
   }
 
-  function hasPartOnCoordinate(ship, coordinate) {
-    return Object.keys(ship.coordinateIsHitByMissileMap).includes(coordinate);
+  function hasPartOnCoordinate({coordinateIsHitByMissileMap}, coordinate) {
+    return Object.keys(coordinateIsHitByMissileMap).includes(coordinate);
   }
 
-  function isShipBoundariesOccupiesCoordinates(ship, coordinates) {
+  function isShipBoundariesOccupiesCoordinates({coordinateIsHitByMissileMap}, coordinates) {
     let occupiesCoordinate = false;
 
-    Object.keys(ship.coordinateIsHitByMissileMap).forEach(shipCoordinate => {
+    Object.keys(coordinateIsHitByMissileMap).forEach(shipCoordinate => {
       [-1, 0, 1].forEach(columnIndex => {
         [-1, 0, 1].forEach(rowIndex => {
           if (coordinates.includes((parseInt(shipCoordinate[0]) + columnIndex).toString().concat(
