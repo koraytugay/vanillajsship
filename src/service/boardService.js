@@ -5,10 +5,8 @@ const boardService = function() {
   function addShip({ships}, ship) {
     const shipCoordinates = Object.keys(ship.coordinateIsHitByMissileMap);
 
-    for (const shipOnBoard of ships) {
-      if (shipService.isShipBoundariesOccupiesCoordinates(shipOnBoard, shipCoordinates)) {
-        throw "Ships is in the boundaries of another ship."
-      }
+    if (ships.some(ship => shipService.isShipBoundariesOccupiesCoordinates(ship, shipCoordinates))) {
+      throw "Ships is in the boundaries of another ship."
     }
 
     ships.push(ship);
