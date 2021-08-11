@@ -30,21 +30,9 @@ let isHit = boardService.missileCoordinate(board, "00");
 if (!isHit) {
   alert("Should have been hit!");
 }
-if (!board.missileAttempts.includes("00")) {
-  alert("Should have include 00!");
-}
-
-// Test unMissileCoordinate
-board = new Board(8);
-ship = new Ship(["00"]);
-boardService.addShip(board, ship);
-boardService.missileCoordinate(board, "00");
-if (!board.missileAttempts.includes("00")) {
-  alert("Should have include 00!");
-}
 boardService.unMissileCoordinate(board, "00");
-if (board.missileAttempts.includes("00")) {
-  alert("Should have not include 00!");
+if (ship.coordinateIsHitByMissileMap["00"]) {
+  alert("Should have been un-missiled!");
 }
 
 // Test allShipsSank
