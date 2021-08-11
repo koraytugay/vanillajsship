@@ -1,6 +1,4 @@
-export default function ship(coordinates) {
+export default function Ship(coordinates) {
   this.coordinateIsHitByMissileMap = {};
-  for (const coordinate of coordinates) {
-    this.coordinateIsHitByMissileMap[coordinate] = false;
-  }
+  coordinates.forEach(coordinate => this.coordinateIsHitByMissileMap[coordinate] = false);
 }

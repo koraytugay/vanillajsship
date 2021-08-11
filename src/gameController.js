@@ -20,6 +20,7 @@ import boardService from './service/boardService.js';
       }
       board.appendChild(document.createElement("br"));
     }
+    updateIsGameFinished();
   }
 
   function sinkShip({coordinateIsHitByMissileMap}) {
