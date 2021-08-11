@@ -28,11 +28,7 @@ const boardService = function() {
 
   function findShipOccupyingCoordinateOnBoard({ships}, coordinate) {
     let shipOnCoordinate = ships.filter(ship => Object.keys(ship.coordinateIsHitByMissileMap).includes(coordinate));
-    if (shipOnCoordinate) {
-      return shipOnCoordinate[0];
-    } else {
-      return null;
-    }
+    return shipOnCoordinate ? shipOnCoordinate[0] : null;
   }
 
   return {
