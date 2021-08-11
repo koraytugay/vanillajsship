@@ -25,7 +25,7 @@ const boardService = function() {
   }
 
   function findShipOccupyingCoordinateOnBoard({ships}, coordinate) {
-    let shipOnCoordinate = ships.filter(ship => Object.keys(ship.coordinateIsHitByMissileMap).includes(coordinate));
+    let shipOnCoordinate = ships.filter(ship => shipService.hasPartOnCoordinate(ship, coordinate));
     return shipOnCoordinate ? shipOnCoordinate[0] : null;
   }
 

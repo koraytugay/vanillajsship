@@ -45,12 +45,11 @@ import boardService from './service/boardService.js';
     }
 
     // See if there is a ship on the coordinate and if is ship sunk..
-    let ship = boardService.findShipOccupyingCoordinateOnBoard(game.board, missileCoordinate);
-    if (ship === null || !shipService.isSank(ship)) {
-      return;
+    const ship = boardService.findShipOccupyingCoordinateOnBoard(game.board, missileCoordinate);
+    if (ship && shipService.isSank(ship)) {
+      sinkShip(ship);
+      updateIsGameFinished();
     }
-    sinkShip(ship);
-    updateIsGameFinished();
   }
 
   function undo() {
