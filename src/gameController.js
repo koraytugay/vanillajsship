@@ -2,14 +2,14 @@ import gameService from './service/gameService.js';
 import shipService from './service/shipService.js';
 import boardService from './service/boardService.js';
 
-let currentGame;
+let game;
 
 function printNewBoard() {
-  currentGame = gameService.newGame();
+  game = gameService.newGame();
   const board = document.querySelector("#board");
   board.innerHTML = "";
-  for (let i = 0; i < currentGame.board.boardSize; i++) {
-    for (let j = 0; j < currentGame.board.boardSize; j++) {
+  for (let i = 0; i < game.board.boardSize; i++) {
+    for (let j = 0; j < game.board.boardSize; j++) {
       let boardCell = document.createElement("div");
       boardCell.classList.add(...["cell", "noAttempt"]);
       boardCell.id = 'c' + i + j;
@@ -18,83 +18,91 @@ function printNewBoard() {
     }
     board.appendChild(document.createElement("br"));
   }
-  checkGameIsFinished();
+  updateIsGameFinished();
 }
 
-function missileCoordinate(evt) {
-  const missileCoordinate = evt.target.id.substring(1);
-  let [game, isHit] = gameService.sendMissile(currentGame, missileCoordinate);
-  currentGame = game;
+function sinkShip({ coordinateIsHitByMissileMap }) {
+  Object.keys(coordinateIsHitByMissileMap).forEach(coordinate => {
+    let classList = document.querySelector("#c" + coordinate).classList;
+    classList.remove("hit");
+    classList.add("sank");
+  });
+}
 
-  evt.target.classList.remove("noAttempt");
+function missileCoordinate({target}) {
+  const missileCoordinate = target.id.slice(1);
+  target.classList.remove("noAttempt");
+
+  let isHit = gameService.sendMissile(game, missileCoordinate);
   if (!isHit) {
-    evt.target.classList.add("missed");
+    target.classList.add("missed");
     return;
   }
+  else {
+    target.classList.add("hit");
+  }
 
-  evt.target.classList.add("hit");
+  // See if there is a ship on the coordinate and if is ship sunk..
+  let ship = boardService.findShipOccupyingCoordinateOnBoard(game.board, missileCoordinate);
+  if (ship === null || !shipService.isSank(ship)) {
+    return;
+  }
+  sinkShip(ship);
 
-  // See if the ship sunk..
-  currentGame.board.ships.forEach(ship => {
-    if (shipService.hasPartOnCoordinate(ship, missileCoordinate)) {
-      if (shipService.isSank(ship)) {
-        Object.keys(ship.coordinateIsHitByMissileMap).forEach(shipCoordinate => {
-          let shipCell = document.querySelector("#c" + shipCoordinate);
-          shipCell.classList.remove("hit");
-          shipCell.classList.add("sank");
-        })
-      }
-    }
-  });
-
-  checkGameIsFinished();
+  updateIsGameFinished();
 }
 
 function undo() {
-  let [game, coordinateToUndo] = gameService.undo(currentGame);
-  if (game === null) {
+  try {
+    gameService.undo(game);
+  }
+  catch (ignored) {
+    // There are no moves to undo
     return;
   }
 
-  let shipCell = document.querySelector("#c" + coordinateToUndo);
-  shipCell.classList.remove(...shipCell.classList);
-  shipCell.classList.add(...["cell", "noAttempt"]);
-  currentGame = game;
+  let undoCoordinate = game.missileHistory[game.currentTimeStamp + 1];
+  let cell = document.querySelector("#c" + undoCoordinate);
+  cell.classList.remove(...cell.classList);
+  cell.classList.add(...["cell", "noAttempt"]);
 
-  // Make sure if ship has sunk classes, replace them by hit
-  currentGame.board.ships.forEach(ship => {
-    if (shipService.hasPartOnCoordinate(ship, coordinateToUndo)) {
-      // We did undo, ship must not be sunk anymore..
-      Object.keys(ship.coordinateIsHitByMissileMap).forEach(shipCoordinate => {
-        if (shipCoordinate !== coordinateToUndo) {
-          let shipCell = document.querySelector("#c" + shipCoordinate);
-          if (shipCell.classList.contains("sank")) {
-            shipCell.classList.remove("sank");
-            shipCell.classList.add("hit");
-          }
+  let ship = boardService.findShipOccupyingCoordinateOnBoard(game.board, undoCoordinate);
+  if (ship) {
+    // We did undo, ship must not be sunk anymore..
+    Object.keys(ship.coordinateIsHitByMissileMap).forEach(coordinate => {
+      if (coordinate !== undoCoordinate) {
+        let shipCell = document.querySelector("#c" + coordinate);
+        if (shipCell.classList.contains("sank")) {
+          shipCell.classList.remove("sank");
+          shipCell.classList.add("hit");
         }
-      })
-    }
-  });
+      }
+    })
+  }
 
-  checkGameIsFinished();
+  updateIsGameFinished();
 }
 
 function redo() {
-  let [game, coordinateToMissile, isHit] = gameService.redo(currentGame);
-  if (game === null) {
-    return;
+  try {
+    let isHit = gameService.redo(game);
+    if (game === null) {
+      return;
+    }
+    let shipCell = document.querySelector("#c" + game.missileHistory[game.currentTimeStamp]);
+    if (isHit) {
+      shipCell.classList.add("hit");
+    }
+    else {
+      shipCell.classList.add("missed");
+    }
   }
-  let shipCell = document.querySelector("#c" + coordinateToMissile);
-  if (isHit) {
-    shipCell.classList.add("hit");
-  }
-  else {
-    shipCell.classList.add("missed");
+  catch (ignored) {
+    // No history to redo..
   }
 
-  currentGame.board.ships.forEach(ship => {
-    if (shipService.hasPartOnCoordinate(ship, coordinateToMissile)) {
+  game.board.ships.forEach(ship => {
+    if (shipService.hasPartOnCoordinate(ship, game.missileHistory[game.currentTimeStamp])) {
       if (shipService.isSank(ship)) {
         Object.keys(ship.coordinateIsHitByMissileMap).forEach(shipCoordinate => {
           let shipCell = document.querySelector("#c" + shipCoordinate);
@@ -105,16 +113,17 @@ function redo() {
     }
   });
 
-  checkGameIsFinished();
+  updateIsGameFinished();
 }
 
-function checkGameIsFinished() {
+function updateIsGameFinished() {
   const infoPanel = document.querySelector("#info");
-  const isAllShipsSank = boardService.allShipsSank(currentGame.board)
+  const isAllShipsSank = boardService.allShipsSank(game.board)
   if (!isAllShipsSank) {
     infoPanel.classList.add("hidden");
     infoPanel.classList.remove("block");
-  } else {
+  }
+  else {
     infoPanel.classList.remove("hidden");
     infoPanel.classList.add("block");
   }
@@ -131,3 +140,5 @@ document.querySelector("#undo").addEventListener("click", () => {
 document.querySelector("#redo").addEventListener("click", () => {
   redo();
 });
+
+printNewBoard();

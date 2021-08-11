@@ -12,7 +12,7 @@ const gameService = function() {
   function newGame() {
     const board = new Board(4 + getRandomInt(5));
     // Try adding a few ships
-    for (let i = 1; i < 24; i++) {
+    for (let i = 0; i < (getRandomInt(6) + 6); i++) {
       let ship = shipService.newRandomShip(board.boardSize);
       try {
         boardService.addShip(board, ship);
@@ -25,33 +25,25 @@ const gameService = function() {
   }
 
   function sendMissile(game, coordinate) {
-    let history = game.missileHistory.slice(0, game.currentTimeStamp + 1);
-    history.push(coordinate);
-    game.missileHistory = history;
-    game.currentTimeStamp = game.currentTimeStamp + 1;
-    let isHit = boardService.missileCoordinate(game.board, coordinate);
-    return [game, isHit];
+    game.missileHistory = [...game.missileHistory.slice(0, game.currentTimeStamp + 1), coordinate];
+    game.currentTimeStamp++;
+    return boardService.missileCoordinate(game.board, coordinate);
   }
 
   function undo(game) {
     if (game.currentTimeStamp === -1) {
-      return [null, null];
+      throw "There is no history to undo!";
     }
-    let coordinateToUndo = game.missileHistory[game.currentTimeStamp];
-    boardService.unMissileCoordinate(game.board, coordinateToUndo);
-    game.currentTimeStamp = game.currentTimeStamp - 1;
-    debugger;
-    return [game, coordinateToUndo];
+    boardService.unMissileCoordinate(game.board, game.missileHistory[game.currentTimeStamp]);
+    game.currentTimeStamp--;
   }
 
   function redo(game) {
-    if (game.currentTimeStamp === game.missileHistory.length) {
-      return [null, null];
+    if (game.currentTimeStamp === (game.missileHistory.length - 1)) {
+      throw "There is no history to redo!";
     }
-    let coordinateToMissile = game.missileHistory[game.currentTimeStamp + 1];
-    let isHit = boardService.missileCoordinate(game.board, coordinateToMissile);
-    game.currentTimeStamp = game.currentTimeStamp + 1;
-    return [game, coordinateToMissile, isHit];
+    game.currentTimeStamp++;
+    return boardService.missileCoordinate(game.board, game.missileHistory[game.currentTimeStamp]);
   }
 
   return {

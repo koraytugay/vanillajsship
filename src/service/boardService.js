@@ -30,11 +30,21 @@ const boardService = function() {
     return board.ships.every(ship => shipService.isSank(ship));
   }
 
+  function findShipOccupyingCoordinateOnBoard(board, coordinate) {
+    let ships = board.ships.filter(ship => Object.keys(ship.coordinateIsHitByMissileMap).includes(coordinate));
+    if (ships) {
+      return ships[0];
+    } else {
+      return null;
+    }
+  }
+
   return {
     addShip,
     missileCoordinate,
     unMissileCoordinate,
-    allShipsSank
+    allShipsSank,
+    findShipOccupyingCoordinateOnBoard
   }
 }();
 
