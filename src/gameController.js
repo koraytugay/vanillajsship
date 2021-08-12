@@ -31,17 +31,17 @@ import boardService from './service/boardService.js';
     });
   }
 
-  function missileCoordinate({target}) {
-    const missileCoordinate = target.id.slice(1);
-    target.classList.remove("noAttempt");
+  function missileCoordinate({target: {id, classList}}) {
+    const missileCoordinate = id.slice(1);
+    classList.remove("noAttempt");
 
     let isHit = gameService.sendMissile(game, missileCoordinate);
     if (!isHit) {
-      target.classList.add("missed");
+      classList.add("missed");
       return;
     }
     else {
-      target.classList.add("hit");
+      classList.add("hit");
     }
 
     // See if there is a ship on the coordinate and if is ship sunk..
