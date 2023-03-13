@@ -4,6 +4,7 @@ import boardService from './service/boardService.js';
 
 (function() {
   let game;
+  let boardHeight;
 
   function printNewBoard() {
     game = gameService.newGame();
@@ -20,6 +21,7 @@ import boardService from './service/boardService.js';
       }
       board.appendChild(document.createElement("br"));
     }
+    boardHeight = getComputedStyle(document.querySelector("#board")).height;
     updateIsGameFinished();
   }
 
@@ -117,14 +119,22 @@ import boardService from './service/boardService.js';
 
   function updateIsGameFinished() {
     const infoPanel = document.querySelector("#info");
+    const board = document.querySelector("#board");
     const isAllShipsSank = boardService.allShipsSank(game.board)
     if (!isAllShipsSank) {
       infoPanel.classList.add("hidden");
       infoPanel.classList.remove("block");
+      board.classList.add("table");
+      board.classList.remove("hidden");
     }
     else {
       infoPanel.classList.remove("hidden");
       infoPanel.classList.add("block");
+      infoPanel.style.height = boardHeight;
+      let x = boardHeight.substring(0, boardHeight.length - 2);
+      infoPanel.style.paddingTop = `${(parseFloat(x) / 2) - 20}px`;
+      board.classList.remove("table");
+      board.classList.add("hidden");
     }
   }
 

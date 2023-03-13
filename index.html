@@ -2,34 +2,21 @@
 <html>
 <head>
   <title>VanillaJsShip</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 <div id="container" style="width: 600px">
-  <div id="controls" style="margin-bottom: 20px">
+  <div id="controls" class="table" style="margin-bottom: 20px">
     <button id="newGame">New Game</button>
     <button id="undo">Undo</button>
     <button id="redo">Redo</button>
   </div>
-  <div id="board"></div>
-  <div id="info" class="hidden">
-    Congratulations, you win!
-  </div>
-  <hr/>
-  <div id="legend">
-    <p>Legend</p>
-    <div>
-      <div id="sampleNoAttempt" class="cell noAttempt"></div> No attempt
-    </div>
-    <div>
-      <div id="sampleMissed" class="cell missed"></div> Missed
-    </div>
-    <div>
-      <div id="samplePartialHit" class="cell hit"></div> Partially Hit
-    </div>
-    <div>
-      <div id="sampleSank" class="cell sank"></div> Sank
-    </div>
+  <div id="board" class="table"></div>
+  <div id="info" class="hidden">Congratulations, you win!</div>
+  <div id="legend" class="table">
+    <span id="sampleMissed" class="legend cell missed" style="color: white">Missed</span>
+    <span id="samplePartialHit" class="legend cell hit">Partially Hit</span>
+    <span id="sampleSank" class="legend cell sank">Sank</span>
   </div>
 </div>
 <script type="module" src="src/modal/board.js"></script>
